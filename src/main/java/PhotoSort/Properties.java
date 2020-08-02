@@ -2,54 +2,70 @@ package PhotoSort;
 
 import PhotoSort.Exceptions.FSException;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.FileSystems;
+import java.io.File;
+import java.nio.file.Paths;
 
 public class Properties {
     /*
     properies
      */
-    private String currentPath;
-    private String sourcePath;
-    private String targetPath;
-    private String resources;
-    private String dbPath;
+    //FS
+    private static Properties instance;
+    private static String sourcePath;
+    private static String targetPath;
+    private static String resources;
+    private static String pathSeparator;
 
-    Properties(String[] args){
-        currentPath = FileSystems.getDefault()
-                .getPath("")
-                .toAbsolutePath()
-                .toString();
+
+    public String getSourcePath() {
+        return sourcePath;
+    }
+
+    public String getTargetPath() {
+        return targetPath;
+    }
+
+    public String getResources() {
+        return resources;
+    }
+
+    public String getPathSeparator() {
+        return pathSeparator;
+    }
+
+    private Properties() {
+
+    }
+
+    public static Properties getInstance(){
+        if(instance == null)
+            instance = new Properties();
+        return instance;
+
+    }
+
+    public void setProperties(String[] args){
+
         sourcePath = args[0];
         targetPath = args[1];
-        resources = currentPath + "\\resources";
-        if(!FSConnector.checkForExist(resources)){
-            try {
+        pathSeparator = File.separator;
+        resources = targetPath + pathSeparator + "resources";
+        try {
+            if(!FSConnector.checkForExist(targetPath))
+                FSConnector.createPath(targetPath);
+
+            if(!FSConnector.checkForExist(resources))
                 FSConnector.createPath(resources);
-            } catch (FSException e) {
-                System.out.println(e.getMessage());
-            }
+
+        } catch (FSException e) {
+            System.out.println(e.getMessage());
         }
-
     }
 
-    public boolean saveProperies(){
-
-        //try(OutputStream output = new FileOutputStream(resources + "\\"))
-
-
-        return true;
-    }
-
-    public boolean restoreProperties(){
-
-
-        return true;
     }
 
 
 
 
-}
+
+
