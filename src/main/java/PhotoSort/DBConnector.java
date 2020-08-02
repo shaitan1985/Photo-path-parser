@@ -8,8 +8,6 @@ public class DBConnector {
         */
 
 
-    DBConnector(Properties properties){
-    }
 
 
 }
