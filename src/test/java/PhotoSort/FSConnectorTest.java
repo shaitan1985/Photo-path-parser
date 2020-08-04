@@ -15,14 +15,14 @@ public class FSConnectorTest {
     @Test
     public void checkForExist() {
         String path = "E:\\source";
-        assertEquals(true, FSConnector.checkForExist(path));
+        assertTrue(FSConnector.checkForExist(path));
     }
 
     @Test
     public void createPath() throws FSException, IOException {
         String tempPath = "E:\\" + UUID.randomUUID().toString();
         FSConnector.createPath(tempPath);
-        assertEquals(true, Files.exists(Paths.get(tempPath)));
+        assertTrue(Files.exists(Paths.get(tempPath)));
         Files.delete(Paths.get(tempPath));
     }
 }

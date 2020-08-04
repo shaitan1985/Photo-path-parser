@@ -2,6 +2,7 @@ package PhotoSort;
 
 import PhotoSort.Exceptions.LaunchException;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -19,14 +20,16 @@ public class PhotoSortLauncher {
 
     }
 
-    public void start() throws SQLException {
+    public void start() throws SQLException, IOException {
 
         dbConnector = new DBConnector();
-        try(Connection con = dbConnector.getNewConnection(properties.getResources()
+        FSConnector.walkFileTree(properties.getSourcePath(), properties.getTargetPath());
+
+        /*try(Connection con = dbConnector.getNewConnection(properties.getResources()
                 + properties.getPathSeparator()
                 + "DB")){
             System.out.println("connected");
-        }
+        }*/
     }
 
 

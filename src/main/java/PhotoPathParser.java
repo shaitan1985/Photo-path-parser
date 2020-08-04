@@ -1,6 +1,7 @@
 import PhotoSort.Exceptions.LaunchException;
 import PhotoSort.PhotoSortLauncher;
 
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ public class PhotoPathParser {
             PhotoSortLauncher photoSortLauncher = new PhotoSortLauncher(args);
             photoSortLauncher.start();
         }
-        catch (LaunchException | SQLException ex){
+        catch (LaunchException | SQLException | IOException ex){
             System.out.println(ex);
         }
 
