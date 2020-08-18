@@ -22,14 +22,14 @@ public class PhotoSortLauncher {
 
     public void start() throws SQLException, IOException {
 
-        dbConnector = new DBConnector();
-        FSConnector.walkFileTree(properties.getSourcePath(), properties.getTargetPath());
-
-        /*try(Connection con = dbConnector.getNewConnection(properties.getResources()
+        dbConnector = new DBConnector(properties.getResources()
                 + properties.getPathSeparator()
-                + "DB")){
-            System.out.println("connected");
-        }*/
+                + "DB");
+        dbConnector.init();
+
+        FSConnector.walkFileTree(properties.getSourcePath(), properties.getTargetPath(), dbConnector);
+        dbConnector.printTable();
+
     }
 
 

@@ -3,19 +3,21 @@ package PhotoSort;
 import PhotoSort.Exceptions.FSException;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import com.sun.xml.internal.ws.api.addressing.WSEndpointReference;
+import org.apache.commons.codec.digest.DigestUtils;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public abstract class FSConnector {
     /*
@@ -35,7 +37,7 @@ public abstract class FSConnector {
 
     }
 
-    public static void walkFileTree(String sourcePath, String targetPath) throws IOException {
+    public static void walkFileTree(final String sourcePath, String targetPath, final DBConnector dbConnector) throws IOException {
         Files.walkFileTree(Paths.get(sourcePath), new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
@@ -48,13 +50,15 @@ public abstract class FSConnector {
                         || file.toString().endsWith(".rar")
                 )
                     return FileVisitResult.CONTINUE;*/
+                Date date = null;
                 try {
-                    checkMetadata(file.toString());
-                    System.out.println("**********");
-                    System.out.println("**********");
-                    System.out.println("**********");
+                    date = checkMetadata(file.toString());
+                    //System.out.println(date);
+                    String hash = getHashOfFile(file);
+                    dbConnector.addToDB(file.toString(), date, hash);
                 } catch (ImageProcessingException e) {
-                    System.out.println(file.toString() + " not image file.");
+
+                    //System.out.println(file.toString() + " not image file.");
                 }
 
                 return FileVisitResult.CONTINUE;
@@ -74,12 +78,22 @@ public abstract class FSConnector {
 
     }
 
-    public static void checkMetadata(String file) throws ImageProcessingException, IOException {
+    private static String getHashOfFile(Path file) {
+
+        try(InputStream is = Files.newInputStream(file)) {
+            return DigestUtils.md5Hex(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static Date checkMetadata(String file) throws ImageProcessingException, IOException {
         Metadata metadata = ImageMetadataReader.readMetadata(new FileInputStream(file));
         ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
 
         Date date = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
-        System.out.println(date.toString());
+        return date;
         }
     }
 
