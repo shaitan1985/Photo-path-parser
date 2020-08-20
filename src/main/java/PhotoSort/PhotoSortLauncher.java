@@ -11,7 +11,7 @@ public class PhotoSortLauncher {
     private Properties properties;
 
     public PhotoSortLauncher(String[] args) throws LaunchException {
-        if (args.length != 2) throw new LaunchException("Wrong parameters");
+        if (args.length < 2) throw new LaunchException("Not enough parameters");
         if (!FSConnector.checkForExist(args[0]))
            throw new LaunchException("Source path is failed");
         properties = Properties.getInstance();

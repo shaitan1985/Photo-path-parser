@@ -27,7 +27,7 @@ public class DBConnector {
 
     public void init() throws SQLException {
         checkConnection();
-        dropTable();
+        //dropTable();
         createTables();
     }
 
