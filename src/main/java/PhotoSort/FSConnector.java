@@ -7,6 +7,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,8 +98,16 @@ public abstract class FSConnector {
         return date;
         }
 
-    public static void moveFiles(HashMap<String, MediaData> dataMap, String targetPath) {
+    public static void moveFiles(String sourcePath, String targetPath) {
         //
+    }
+
+    public static String insertSep(String source){
+        return source + getSeparator();
+    }
+
+    public static String getSeparator() {
+        return File.separator;
     }
 }
 

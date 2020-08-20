@@ -28,7 +28,14 @@ public class PhotoSortLauncher {
         dbConnector.init();
 
         FSConnector.walkFileTree(properties.getSourcePath(), dbConnector);
-        FSConnector.moveFiles(dbConnector.getDataMap(), properties.getTargetPath());
+
+        dbConnector.getDataMap()
+                .entrySet()
+                .stream()
+                .forEach(s -> FSConnector.moveFiles(
+                        s.getValue().getPath()
+                        , FSConnector.insertSep(properties.getTargetPath())
+                                + s.getValue().dateToPath()));
         dbConnector.printTable();
 
     }

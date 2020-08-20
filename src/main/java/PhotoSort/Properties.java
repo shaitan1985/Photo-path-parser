@@ -48,7 +48,7 @@ public class Properties {
 
         sourcePath = args[0];
         targetPath = args[1];
-        pathSeparator = File.separator;
+        pathSeparator = FSConnector.getSeparator();
         resources = targetPath + pathSeparator + "resources";
         try {
             if(!FSConnector.checkForExist(targetPath))

@@ -1,6 +1,9 @@
 package PhotoSort;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.StringJoiner;
+import java.util.TimeZone;
 
 public class MediaData {
     int id;
@@ -39,5 +42,16 @@ public class MediaData {
 
     public String getHash() {
         return hash;
+    }
+
+    public String dateToPath(){
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+        cal.setTime(fDate);
+        StringJoiner sj = new StringJoiner(FSConnector.getSeparator());
+        sj.add(Integer.toString(cal.get(Calendar.YEAR)));
+        sj.add(Integer.toString(cal.get(Calendar.MONTH)));
+        sj.add(Integer.toString(cal.get(Calendar.DAY_OF_MONTH)));
+
+        return sj.toString();
     }
 }
