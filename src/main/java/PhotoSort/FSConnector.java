@@ -17,6 +17,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class FSConnector {
@@ -37,7 +38,7 @@ public abstract class FSConnector {
 
     }
 
-    public static void walkFileTree(final String sourcePath, String targetPath, final DBConnector dbConnector) throws IOException {
+    public static void walkFileTree(final String sourcePath, final DBConnector dbConnector) throws IOException {
         Files.walkFileTree(Paths.get(sourcePath), new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
@@ -95,7 +96,11 @@ public abstract class FSConnector {
         Date date = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
         return date;
         }
+
+    public static void moveFiles(HashMap<String, MediaData> dataMap, String targetPath) {
+        //
     }
+}
 
 
 

@@ -1,8 +1,11 @@
 package PhotoSort;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class DBConnector {
     /*
@@ -86,25 +89,35 @@ public class DBConnector {
     }
 
     public void printTable(){
+
+        HashMap<String, MediaData> map = getDataMap();
+
+        map.entrySet().stream().forEach(s -> System.out.println(s.getValue()));
+    }
+
+
+    public HashMap<String, MediaData> getDataMap() {
+        HashMap<String, MediaData> map = new HashMap<>();
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat sf = new SimpleDateFormat(pattern);
+
         String query = "SELECT * FROM files";
         try {
             ResultSet rs = executeSelect(query);
             while(rs.next()){
-                System.out.println(rs.getString(1) + "__" +
-                        rs.getString(2) + "__" +
-                        rs.getString(3) + "__" +
-                        rs.getString(4)
-                        );
+                MediaData mDataa = new MediaData(rs.getInt(1),
+                        rs.getString(2),
+                        sf.parse(rs.getString(3)),
+                        rs.getString(4));
+                map.put(rs.getString(4), mDataa);
+
             }
 
 
-        } catch (SQLException throwables) {
+        } catch (SQLException | ParseException throwables) {
             throwables.printStackTrace();
         }
-
-
+        return map;
     }
-
-
 }
 
